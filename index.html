@@ -180,6 +180,7 @@ section.block { padding: 64px 0; border-top: 1px solid var(--line); }
 .contact .btn.ghost:hover { border-color: var(--bg); }
 .contact-actions { display: flex; flex-direction: column; gap: 10px; min-width: 220px; }
 .contact-actions .addr { font: 500 .85rem var(--mono); opacity: .75; text-align: center; }
+.contact-actions .addr:empty { display: none; }
 
 footer { padding: 28px 0 48px; color: var(--muted); font-size: .88rem; }
 footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
@@ -435,7 +436,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
           <a class="btn ghost" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">Download resume (PDF)</a>
           <button class="btn ghost" id="mailBtn" type="button">Send an email</button>
           <button class="btn ghost" id="copyBtn" type="button">Copy email address</button>
-          <div class="addr" id="addr" aria-live="polite">Address is hidden from spam bots</div>
+          <div class="addr" id="addr" aria-live="polite"></div>
         </div>
       </div>
     </div>
