@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oscar Saenz</title>
+<meta name="description" content="Oscar Saenz, VDI and cloud infrastructure engineer. Azure Virtual Desktop, Omnissa Horizon, FSLogix, Packer, Terraform and PowerShell automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: left-aligned editorial resume site. Narrow top bar, split hero with photo,
+   a delivery-chain diagram as the one signature visual, then ruled sections. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #0e1f33;
+  --muted: #55657a;
+  --line: #d9e0e9;
+  --accent: #1d5fc4;
+  --accent-soft: #e4edfb;
+  --signal: #b8482f;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1522; --surface: #111f31; --ink: #e8eef6; --muted: #93a3b8;
+    --line: #223349; --accent: #6aa3f5; --accent-soft: #162a47; --signal: #ee8f76;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1522; --surface: #111f31; --ink: #e8eef6; --muted: #93a3b8;
+  --line: #223349; --accent: #6aa3f5; --accent-soft: #162a47; --signal: #ee8f76;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* Top bar */
+.bar {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+.brand { font: 700 1.05rem var(--display); color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a {
+  color: var(--muted); text-decoration: none; font-size: .93rem; font-weight: 500;
+  padding: 6px 12px; border-radius: 999px;
+}
+.nav a:hover, .nav a.on { color: var(--ink); background: var(--accent-soft); }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); cursor: pointer; display: grid; place-items: center;
+}
+.icon-btn:hover { border-color: var(--accent); }
+
+/* Hero */
+.hero { padding: 72px 0 56px; }
+.hero .wrap { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; }
+.kicker { font: 500 .8rem var(--mono); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 18px; }
+h1 { font: 700 clamp(2.5rem, 6vw, 4rem)/1.04 var(--display); letter-spacing: -0.03em; margin: 0 0 14px; text-wrap: balance; }
+.role { font: 500 clamp(1.1rem, 2.2vw, 1.35rem)/1.35 var(--display); color: var(--muted); margin: 0 0 24px; }
+.lede { max-width: 56ch; margin: 0 0 32px; font-size: 1.12rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px;
+  font: 600 .98rem var(--body); text-decoration: none; cursor: pointer; border: 1px solid transparent;
+}
+.btn.primary { background: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #07121f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #07121f; } }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { border-color: var(--accent); }
+.alt-dl { margin: 14px 0 0; font-size: .92rem; color: var(--muted); }
+.nav a.nav-cta { color: var(--accent); border: 1px solid var(--accent); margin-left: 4px; }
+.nav a.nav-cta:hover { background: var(--accent-soft); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 32px 0 0; padding: 0; list-style: none; font-size: .93rem; color: var(--muted); }
+.facts li::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--signal); margin-right: 9px; vertical-align: middle; }
+
+/* Photo */
+.photo { position: relative; width: 100%; max-width: 300px; justify-self: end; }
+.photo-frame {
+  aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; position: relative;
+  background: linear-gradient(160deg, var(--accent-soft), var(--surface));
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 48px -28px rgba(14,31,51,.45);
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-frame svg { width: 100%; height: 100%; display: block; color: var(--accent); }
+.photo-btn {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+  padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 92%, transparent); color: var(--ink);
+  font: 600 .88rem var(--body); cursor: pointer; text-align: center;
+}
+.photo-btn:hover { border-color: var(--accent); }
+.photo::after {
+  content: ""; position: absolute; inset: 14px -14px -14px 14px; z-index: -1;
+  border: 1px solid var(--line); border-radius: 20px;
+}
+
+/* Sections */
+section.block { padding: 64px 0; border-top: 1px solid var(--line); }
+.head { display: grid; grid-template-columns: 220px 1fr; gap: 40px; margin-bottom: 36px; }
+.head h2 { font: 700 1.9rem/1.1 var(--display); letter-spacing: -0.02em; margin: 0; }
+.head p { margin: 0; color: var(--muted); max-width: 60ch; align-self: end; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+.card h3 { font: 700 1.05rem var(--display); margin: 0 0 8px; letter-spacing: -0.01em; }
+.card p { margin: 0 0 14px; color: var(--muted); font-size: .97rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.tags li { font: 500 .76rem var(--mono); padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+
+/* Delivery chain */
+.chain { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+.chain ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; counter-reset: step; }
+.chain li { position: relative; padding: 0 14px 0 0; }
+.chain li::before {
+  counter-increment: step; content: "0" counter(step);
+  display: block; font: 500 .78rem var(--mono); color: var(--signal); margin-bottom: 10px;
+}
+.chain li::after {
+  content: ""; position: absolute; top: 9px; left: 30px; right: 8px; height: 1px; background: var(--line);
+}
+.chain li:last-child::after { display: none; }
+.chain strong { display: block; font: 700 1rem var(--display); margin-bottom: 4px; }
+.chain span { font-size: .88rem; color: var(--muted); display: block; line-height: 1.45; }
+.chain .note { margin: 22px 0 0; padding-top: 18px; border-top: 1px dashed var(--line); font-size: .92rem; color: var(--muted); }
+
+/* Experience */
+.jobs { display: grid; gap: 0; }
+.job { display: grid; grid-template-columns: 220px 1fr; gap: 40px; padding: 28px 0; border-top: 1px solid var(--line); }
+.job:first-child { border-top: 0; padding-top: 0; }
+.when { font: 500 .85rem var(--mono); color: var(--muted); }
+.job h3 { font: 700 1.25rem/1.25 var(--display); margin: 0 0 2px; letter-spacing: -0.01em; }
+.org { color: var(--accent); font-weight: 600; margin: 0 0 14px; }
+.job ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.job li::marker { color: var(--signal); }
+
+/* Certs */
+.certs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.certs li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.certs b { display: block; font-weight: 600; }
+.certs small { color: var(--muted); font: 500 .8rem var(--mono); }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 40px; }
+.contact h2 { font: 700 clamp(1.7rem, 3.5vw, 2.3rem)/1.1 var(--display); margin: 0 0 10px; letter-spacing: -0.02em; }
+.contact p { margin: 0; opacity: .8; max-width: 52ch; }
+.contact .btn.primary { background: var(--bg); color: var(--ink); }
+.contact .btn.ghost { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 35%, transparent); }
+.contact .btn.ghost:hover { border-color: var(--bg); }
+.contact-actions { display: flex; flex-direction: column; gap: 10px; min-width: 220px; }
+.contact-actions .addr { font: 500 .85rem var(--mono); opacity: .75; text-align: center; }
+
+footer { padding: 28px 0 48px; color: var(--muted); font-size: .88rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 880px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 40px; }
+  .photo { justify-self: start; max-width: 240px; }
+  .head, .job { grid-template-columns: 1fr; gap: 10px; }
+  .grid, .certs { grid-template-columns: 1fr 1fr; }
+  .chain ol { grid-template-columns: 1fr; gap: 18px; }
+  .chain li::after { display: none; }
+  .contact { grid-template-columns: 1fr; padding: 28px; }
+  .nav a:not(.keep) { display: none; }
+}
+@media (max-width: 560px) {
+  .grid, .certs { grid-template-columns: 1fr; }
+  .hero { padding-top: 48px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top">Oscar Saenz</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#expertise">Expertise</a>
+      <a href="#platform">Platform</a>
+      <a href="#experience">Experience</a>
+      <a href="#credentials">Credentials</a>
+      <a href="#contact">Contact</a>
+      <a href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf" class="keep nav-cta">Resume</a>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch color theme" title="Switch theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="kicker">Open to new roles</p>
+        <h1>Oscar Saenz</h1>
+        <p class="role">Senior VDI &amp; Cloud Infrastructure Engineer</p>
+        <p class="lede">I design, automate and repair enterprise virtual desktop platforms. Azure Virtual Desktop, Omnissa Horizon and Windows 365 are my daily work, and I am the person called in when production breaks.</p>
+        <div class="actions">
+          <a class="btn primary" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+            Download resume (PDF)
+          </a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+        <p class="alt-dl"><a href="Oscar-Saenz-Resume.docx" download="Oscar-Saenz-Resume.docx">Word version (.docx)</a> &middot; <a href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">LinkedIn</a></p>
+        <ul class="facts">
+          <li>16+ years in IT</li>
+          <li>13+ years at Cox Automotive</li>
+          <li>Gainesville, GA</li>
+          <li>English and Spanish</li>
+        </ul>
+      </div>
+
+      <div class="photo">
+        <div class="photo-frame" id="photoFrame">
+          <svg id="placeholder" viewBox="0 0 240 300" role="img" aria-label="Photo placeholder" fill="currentColor">
+            <circle cx="120" cy="112" r="46" opacity=".22"/>
+            <path d="M32 300c0-58 39-98 88-98s88 40 88 98z" opacity=".22"/>
+          </svg>
+          <button class="photo-btn" id="photoBtn" type="button">Add your photo</button>
+          <input type="file" id="photoInput" accept="image/*" hidden>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="expertise">
+    <div class="wrap">
+      <div class="head">
+        <h2>Expertise</h2>
+        <p>The platforms and practices I own end to end, from image build to production escalation.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>Virtual desktop platforms</h3>
+          <p>Host pools, session hosts, application delivery, scaling, disaster recovery and performance.</p>
+          <ul class="tags"><li>Azure Virtual Desktop</li><li>Omnissa Horizon</li><li>Windows 365</li><li>App Volumes</li></ul>
+        </article>
+        <article class="card">
+          <h3>Profiles and storage</h3>
+          <p>Profile containers, Cloud Cache design, storage behavior and profile troubleshooting.</p>
+          <ul class="tags"><li>FSLogix</li><li>Cloud Cache</li><li>Azure storage</li></ul>
+        </article>
+        <article class="card">
+          <h3>Image engineering</h3>
+          <p>Gold images built through a pipeline, with Office configuration and deployment validation.</p>
+          <ul class="tags"><li>Packer</li><li>Azure Compute Gallery</li><li>GitHub Actions</li></ul>
+        </article>
+        <article class="card">
+          <h3>Automation and IaC</h3>
+          <p>Provisioning, monitoring and routine maintenance moved from manual steps to code.</p>
+          <ul class="tags"><li>PowerShell</li><li>Terraform</li><li>Azure CLI</li><li>Python</li></ul>
+        </article>
+        <article class="card">
+          <h3>Identity and networking</h3>
+          <p>Authentication, certificates and True SSO across Entra ID, Active Directory and Azure networking.</p>
+          <ul class="tags"><li>Entra ID</li><li>Active Directory</li><li>True SSO</li><li>Azure networking</li></ul>
+        </article>
+        <article class="card">
+          <h3>Observability</h3>
+          <p>Health dashboards, utilization reporting and operational analytics built on Azure telemetry.</p>
+          <ul class="tags"><li>KQL</li><li>Azure Monitor</li><li>Log Analytics</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="platform">
+    <div class="wrap">
+      <div class="head">
+        <h2>Where I work in the stack</h2>
+        <p>A virtual desktop session passes through five layers. I have hands-on ownership at each one, so I can trace a fault from the user's screen to its source.</p>
+      </div>
+      <div class="chain">
+        <ol>
+          <li><strong>Image</strong><span>Packer pipeline, Azure Compute Gallery, validation</span></li>
+          <li><strong>Session hosts</strong><span>Host pools, scaling, Horizon and AVD infrastructure</span></li>
+          <li><strong>Profile</strong><span>FSLogix containers, Cloud Cache, storage</span></li>
+          <li><strong>Identity</strong><span>Entra ID, Active Directory, certificates, True SSO</span></li>
+          <li><strong>Delivery</strong><span>Published apps and desktops, App Volumes, entitlements</span></li>
+        </ol>
+        <p class="note">Escalation across authentication, profiles, networking, certificates and session hosts is where most of my incident work lands.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="head">
+        <h2>Experience</h2>
+        <p>Thirteen years at one company, moving from systems engineer to technical lead of the VDI platform.</p>
+      </div>
+      <div class="jobs">
+        <article class="job">
+          <div class="when">Jan 2025 – Present</div>
+          <div>
+            <h3>Senior VDI &amp; Cloud Infrastructure Engineer</h3>
+            <p class="org">Cox Automotive, Atlanta, GA</p>
+            <ul>
+              <li>Hands-on technical lead for enterprise VDI across AVD, Omnissa Horizon, Windows 365, App Volumes and FSLogix.</li>
+              <li>Own architecture decisions for host pools, session hosts, images, profile containers and application delivery.</li>
+              <li>Lead technical response in major VDI outages and serve as the escalation point for complex issues.</li>
+              <li>Engineer production image pipelines with Packer and Azure Compute Gallery.</li>
+              <li>Build PowerShell and Terraform automation with GitHub Actions, Azure CLI and Python.</li>
+              <li>Set VDI engineering standards and reusable patterns, and mentor engineers through design reviews.</li>
+              <li>Partner with Microsoft, Omnissa, security, networking and identity teams on platform decisions.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job">
+          <div class="when">Apr 2013 – Dec 2024</div>
+          <div>
+            <h3>Senior Systems Engineer</h3>
+            <p class="org">Cox Automotive, Atlanta, GA</p>
+            <ul>
+              <li>Designed, implemented and optimized virtual desktop environments, and led VDI projects that improved scalability and user experience.</li>
+              <li>Automated user provisioning, monitoring and routine maintenance with PowerShell.</li>
+              <li>Trusted technical escalation point for complex infrastructure issues.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job">
+          <div class="when">Jun 2009 – Apr 2013</div>
+          <div>
+            <h3>Systems Engineer</h3>
+            <p class="org">Forsyth County Schools, Cumming, GA</p>
+            <ul>
+              <li>Supported district-wide systems and end-user computing infrastructure.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job">
+          <div class="when">2005 – 2009</div>
+          <div>
+            <h3>Desktop Support</h3>
+            <p class="org">Forsyth County Schools and Cox Automotive</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="credentials">
+    <div class="wrap">
+      <div class="head">
+        <h2>Credentials</h2>
+        <p>Certifications, newest first. Education: Computer Science and Information Technology, Gainesville State College, 2003 – 2009.</p>
+      </div>
+      <ul class="certs">
+        <li><b>Azure Fundamentals (AZ-900)</b><small>Microsoft · Aug 2024</small></li>
+        <li><b>VCP7 Desktop and Mobility</b><small>VMware · Mar 2018</small></li>
+        <li><b>VCP6 Desktop and Mobility</b><small>VMware · Mar 2017</small></li>
+        <li><b>VCP6 Data Center Virtualization</b><small>VMware · Jul 2016</small></li>
+        <li><b>CCNP Route</b><small>Cisco · May 2015</small></li>
+        <li><b>CCNA</b><small>Cisco · Jan 2014</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <h2>Let's talk about your platform.</h2>
+          <p>I am looking for a role where I can own VDI and cloud infrastructure engineering. The fastest way to reach me is LinkedIn or email.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="btn primary" href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">Message on LinkedIn</a>
+          <a class="btn ghost" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">Download resume (PDF)</a>
+          <button class="btn ghost" id="copyBtn" type="button">Copy email address</button>
+          <div class="addr" id="addr">your.email@example.com</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> Oscar Saenz</span>
+    <span>Gainesville, Georgia</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ---- EDIT ME ----
+  var EMAIL = "your.email@example.com";
+  // -----------------
+
+  var root = document.documentElement;
+  document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("addr").textContent = EMAIL;
+
+  // Theme toggle (remembered per browser when storage is available)
+  function store(k, v) { try { v === undefined ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var savedTheme = load("theme");
+  if (savedTheme) root.setAttribute("data-theme", savedTheme);
+  document.getElementById("themeBtn").addEventListener("click", function () {
+    var current = root.getAttribute("data-theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    store("theme", next);
+  });
+
+  // Photo: pick an image, it shows in place. To make it permanent, set PHOTO_SRC below.
+  var PHOTO_SRC = ""; // e.g. "oscar.jpg" once you host the file next to this page
+  var frame = document.getElementById("photoFrame");
+  var placeholder = document.getElementById("placeholder");
+  var photoBtn = document.getElementById("photoBtn");
+  var input = document.getElementById("photoInput");
+  function showPhoto(src) {
+    var img = frame.querySelector("img");
+    if (!img) { img = document.createElement("img"); img.alt = "Portrait of Oscar Saenz"; frame.insertBefore(img, frame.firstChild); }
+    img.src = src;
+    placeholder.style.display = "none";
+    photoBtn.textContent = "Change photo";
+  }
+  if (PHOTO_SRC) { showPhoto(PHOTO_SRC); photoBtn.hidden = true; }
+  else { var saved = load("photo"); if (saved) showPhoto(saved); }
+  photoBtn.addEventListener("click", function () { input.click(); });
+  input.addEventListener("change", function () {
+    var f = input.files && input.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () { showPhoto(r.result); store("photo", r.result); };
+    r.readAsDataURL(f);
+  });
+
+  // Copy email
+  var copyBtn = document.getElementById("copyBtn");
+  copyBtn.addEventListener("click", function () {
+    var done = function (ok) {
+      copyBtn.textContent = ok ? "Copied" : "Select the address below";
+      setTimeout(function () { copyBtn.textContent = "Copy email address"; }, 2000);
+    };
+    try { navigator.clipboard.writeText(EMAIL).then(function () { done(true); }, function () { done(false); }); }
+    catch (e) { done(false); }
+  });
+
+  // Highlight the nav link for the section in view
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && map[e.target.id]) {
+          links.forEach(function (a) { a.classList.remove("on"); });
+          map[e.target.id].classList.add("on");
+        }
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    Object.keys(map).forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
