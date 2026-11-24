@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1522" media="(prefers-color-scheme: dark)">
 <title>Oscar Saenz</title>
 <meta name="description" content="Oscar Saenz, VDI and cloud infrastructure engineer. Azure Virtual Desktop, Omnissa Horizon, FSLogix, Packer, Terraform and PowerShell automation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,16 +41,23 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font: 400 1.0625rem/1.6 var(--body);
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+  overflow-wrap: break-word;
 }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.wrap {
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+}
 
 /* Top bar */
 .bar {
@@ -103,7 +112,7 @@ h1 { font: 700 clamp(2.5rem, 6vw, 4rem)/1.04 var(--display); letter-spacing: -0.
   border: 1px solid var(--line);
   box-shadow: 0 24px 48px -28px rgba(14,31,51,.45);
 }
-.photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; display: block; }
 .photo-frame svg { width: 100%; height: 100%; display: block; color: var(--accent); }
 .photo-btn {
   position: absolute; left: 14px; right: 14px; bottom: 14px;
@@ -183,11 +192,40 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .chain ol { grid-template-columns: 1fr; gap: 18px; }
   .chain li::after { display: none; }
   .contact { grid-template-columns: 1fr; padding: 28px; }
+  .contact-actions { min-width: 0; }
   .nav a:not(.keep) { display: none; }
+  /* Comfortable touch targets (44px) */
+  .nav a.keep { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; }
+  .icon-btn { width: 44px; height: 44px; }
+  .alt-dl a { display: inline-block; padding: 10px 0; }
+  .photo-btn { padding: 13px 12px; }
+  section.block { padding: 52px 0; }
 }
 @media (max-width: 560px) {
+  .wrap { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
   .grid, .certs { grid-template-columns: 1fr; }
-  .hero { padding-top: 48px; }
+  .hero { padding: 40px 0 44px; }
+  .lede { font-size: 1.05rem; }
+  .actions { flex-direction: column; }
+  .actions .btn, .contact-actions .btn { width: 100%; justify-content: center; min-height: 48px; }
+  .facts { gap: 6px 18px; margin-top: 24px; }
+  .photo { max-width: 200px; }
+  .head h2 { font-size: 1.6rem; }
+  .head { margin-bottom: 28px; }
+  .chain { padding: 22px 20px; }
+  .contact { padding: 24px 20px; border-radius: 16px; }
+  .job { padding: 22px 0; }
+  .job ul { padding-left: 18px; }
+  .contact-actions .addr { overflow-wrap: anywhere; }
+}
+@media (max-width: 360px) {
+  .brand { font-size: .98rem; }
+  .nav a.keep { padding: 0 12px; }
+  h1 { font-size: 2.25rem; }
+}
+/* Touch devices: skip hover-only affordances */
+@media (hover: none) {
+  .btn.primary:hover { filter: none; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
@@ -229,7 +267,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         <p class="alt-dl"><a href="Oscar-Saenz-Resume.docx" download="Oscar-Saenz-Resume.docx">Word version (.docx)</a> &middot; <a href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">LinkedIn</a></p>
         <ul class="facts">
           <li>16+ years in IT</li>
-          <li>13+ years at Cox Automotive</li>
+          <li>7+ years at Cox Automotive</li>
           <li>Gainesville, GA</li>
           <li>English and Spanish</li>
         </ul>
@@ -237,12 +275,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 
       <div class="photo">
         <div class="photo-frame" id="photoFrame">
-          <svg id="placeholder" viewBox="0 0 240 300" role="img" aria-label="Photo placeholder" fill="currentColor">
-            <circle cx="120" cy="112" r="46" opacity=".22"/>
-            <path d="M32 300c0-58 39-98 88-98s88 40 88 98z" opacity=".22"/>
-          </svg>
-          <button class="photo-btn" id="photoBtn" type="button">Add your photo</button>
-          <input type="file" id="photoInput" accept="image/*" hidden>
+          <img src="oscar.jpg" width="720" height="1080" alt="Portrait of Oscar Saenz" fetchpriority="high" decoding="async">
         </div>
       </div>
     </div>
@@ -312,13 +345,13 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     <div class="wrap">
       <div class="head">
         <h2>Experience</h2>
-        <p>Thirteen years at one company, moving from systems engineer to technical lead of the VDI platform.</p>
+        <p>Seven years at Cox Automotive as technical lead of the VDI platform, after VDI and desktop roles at Waystar, Navicure and Forsyth County Schools.</p>
       </div>
       <div class="jobs">
         <article class="job">
-          <div class="when">Jan 2025 – Present</div>
+          <div class="when">May 2019 &ndash; Present</div>
           <div>
-            <h3>Senior VDI &amp; Cloud Infrastructure Engineer</h3>
+            <h3>Senior Systems Engineer</h3>
             <p class="org">Cox Automotive, Atlanta, GA</p>
             <ul>
               <li>Hands-on technical lead for enterprise VDI across AVD, Omnissa Horizon, Windows 365, App Volumes and FSLogix.</li>
@@ -332,36 +365,34 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
           </div>
         </article>
         <article class="job">
-          <div class="when">Apr 2013 – Dec 2024</div>
+          <div class="when">Mar 2016 &ndash; May 2019</div>
           <div>
-            <h3>Senior Systems Engineer</h3>
-            <p class="org">Cox Automotive, Atlanta, GA</p>
-            <ul>
-              <li>Designed, implemented and optimized virtual desktop environments, and led VDI projects that improved scalability and user experience.</li>
-              <li>Automated user provisioning, monitoring and routine maintenance with PowerShell.</li>
-              <li>Trusted technical escalation point for complex infrastructure issues.</li>
-            </ul>
+            <h3>VMware VDI Admin</h3>
+            <p class="org">Waystar (the combination of Navicure and ZirMed)</p>
           </div>
         </article>
         <article class="job">
-          <div class="when">Jun 2009 – Apr 2013</div>
+          <div class="when">Jul 2014 &ndash; Jan 2016</div>
           <div>
-            <h3>Systems Engineer</h3>
-            <p class="org">Forsyth County Schools, Cumming, GA</p>
-            <ul>
-              <li>Supported district-wide systems and end-user computing infrastructure.</li>
-            </ul>
+            <h3>Desktop Administrator</h3>
+            <p class="org">Navicure</p>
           </div>
         </article>
         <article class="job">
-          <div class="when">2005 – 2009</div>
+          <div class="when">Aug 2012 &ndash; Jul 2014</div>
           <div>
-            <h3>Desktop Support</h3>
-            <p class="org">Forsyth County Schools and Cox Automotive</p>
+            <h3>TSS</h3>
+            <p class="org">Forsyth County Schools, Georgia</p>
           </div>
         </article>
-      </div>
-    </div>
+        <article class="job">
+          <div class="when">Jan 2012 &ndash; Aug 2012</div>
+          <div>
+            <h3>Intern</h3>
+            <p class="org">Gainesville City Schools, Gainesville, GA</p>
+          </div>
+        </article>
+      </div>    </div>
   </section>
 
   <section class="block" id="credentials">
@@ -391,8 +422,9 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         <div class="contact-actions">
           <a class="btn primary" href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">Message on LinkedIn</a>
           <a class="btn ghost" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">Download resume (PDF)</a>
+          <button class="btn ghost" id="mailBtn" type="button">Send an email</button>
           <button class="btn ghost" id="copyBtn" type="button">Copy email address</button>
-          <div class="addr" id="addr">your.email@example.com</div>
+          <div class="addr" id="addr" aria-live="polite">Address is hidden from spam bots</div>
         </div>
       </div>
     </div>
@@ -408,13 +440,14 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 
 <script>
 (function () {
-  // ---- EDIT ME ----
-  var EMAIL = "your.email@example.com";
-  // -----------------
+  // The address is never written in the page source. It is decoded only when a visitor
+  // clicks a button, which defeats the scrapers that harvest emails from HTML.
+  var EMAIL_B64 = "b3NjYXJzYWVuemFAb3V0bG9vay5jb20=";
+  function email() { return atob(EMAIL_B64); }
 
   var root = document.documentElement;
   document.getElementById("year").textContent = new Date().getFullYear();
-  document.getElementById("addr").textContent = EMAIL;
+  var addr = document.getElementById("addr");
 
   // Theme toggle (remembered per browser when storage is available)
   function store(k, v) { try { v === undefined ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
@@ -429,38 +462,19 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     store("theme", next);
   });
 
-  // Photo: pick an image, it shows in place. To make it permanent, set PHOTO_SRC below.
-  var PHOTO_SRC = ""; // e.g. "oscar.jpg" once you host the file next to this page
-  var frame = document.getElementById("photoFrame");
-  var placeholder = document.getElementById("placeholder");
-  var photoBtn = document.getElementById("photoBtn");
-  var input = document.getElementById("photoInput");
-  function showPhoto(src) {
-    var img = frame.querySelector("img");
-    if (!img) { img = document.createElement("img"); img.alt = "Portrait of Oscar Saenz"; frame.insertBefore(img, frame.firstChild); }
-    img.src = src;
-    placeholder.style.display = "none";
-    photoBtn.textContent = "Change photo";
-  }
-  if (PHOTO_SRC) { showPhoto(PHOTO_SRC); photoBtn.hidden = true; }
-  else { var saved = load("photo"); if (saved) showPhoto(saved); }
-  photoBtn.addEventListener("click", function () { input.click(); });
-  input.addEventListener("change", function () {
-    var f = input.files && input.files[0];
-    if (!f) return;
-    var r = new FileReader();
-    r.onload = function () { showPhoto(r.result); store("photo", r.result); };
-    r.readAsDataURL(f);
+  // Email: reveal, copy or open the mail app, all on click
+  document.getElementById("mailBtn").addEventListener("click", function () {
+    addr.textContent = email();
+    window.location.href = "mailto:" + email();
   });
-
-  // Copy email
   var copyBtn = document.getElementById("copyBtn");
   copyBtn.addEventListener("click", function () {
+    addr.textContent = email();
     var done = function (ok) {
       copyBtn.textContent = ok ? "Copied" : "Select the address below";
       setTimeout(function () { copyBtn.textContent = "Copy email address"; }, 2000);
     };
-    try { navigator.clipboard.writeText(EMAIL).then(function () { done(true); }, function () { done(false); }); }
+    try { navigator.clipboard.writeText(email()).then(function () { done(true); }, function () { done(false); }); }
     catch (e) { done(false); }
   });
 
