@@ -41,6 +41,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
@@ -241,8 +242,8 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
       <a href="#platform">Platform</a>
       <a href="#experience">Experience</a>
       <a href="#credentials">Credentials</a>
-      <a href="#contact">Contact</a>
-      <a href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf" class="keep nav-cta">Resume</a>
+      <a href="#contact" class="keep">Contact</a>
+      <a href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf" class="keep nav-cta" hidden>Resume</a>
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch color theme" title="Switch theme">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
@@ -259,17 +260,18 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         <p class="role">Senior VDI &amp; Cloud Infrastructure Engineer</p>
         <p class="lede">I design, automate and repair enterprise virtual desktop platforms. Azure Virtual Desktop, Omnissa Horizon and Windows 365 are my daily work, and I am the person called in when production breaks.</p>
         <div class="actions">
-          <a class="btn primary" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">
+          <a class="btn primary" hidden href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
             Download resume (PDF)
           </a>
-          <a class="btn ghost" href="#contact">Get in touch</a>
+          <a class="btn primary" href="#contact">Get in touch</a>
         </div>
-        <p class="alt-dl"><a href="Oscar-Saenz-Resume.docx" download="Oscar-Saenz-Resume.docx">Word version (.docx)</a> &middot; <a href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">LinkedIn</a></p>
+        <p class="alt-dl"><span hidden><a href="Oscar-Saenz-Resume.docx" download="Oscar-Saenz-Resume.docx">Word version (.docx)</a> &middot; </span><a href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">LinkedIn</a></p>
         <ul class="facts">
           <li>14+ years in IT</li>
           <li>7+ years at Cox Automotive</li>
           <li>Gainesville, GA</li>
+          <li>Remote preferred, or hybrid within 40 miles</li>
           <li>English and Spanish</li>
         </ul>
       </div>
@@ -286,7 +288,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     <div class="wrap">
       <div class="head">
         <h2>Expertise</h2>
-        <p>The platforms and practices I own end to end, from image build to production escalation.</p>
+        <p>The platforms and practices I work in, from image build to production escalation.</p>
       </div>
       <div class="grid">
         <article class="card">
@@ -355,17 +357,12 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
             <h3>Senior Systems Engineer</h3>
             <p class="org">Cox Automotive, Atlanta, GA</p>
             <ul>
-              <li>Engineer and support enterprise virtual desktop and application platforms across Azure Virtual Desktop, Windows 365 and Omnissa Horizon.</li>
-              <li>Own the Omnissa Horizon desktop and published-application platform, from connection brokers and Cloud Pod Architecture to pools, golden images and snapshots.</li>
-              <li>Diagnose App Volumes problems across the manager, agents and packages, including version mismatches, attachment failures and applications that will not launch.</li>
-              <li>Trace Horizon issues through the vSphere, image and network layers underneath, and keep restoring service separate from confirming root cause, escalating to the vendor when needed.</li>
-              <li>Validate images and applications before wider rollout, and harden brokers and App Volumes infrastructure with better snapshot traceability, recovery steps and documentation.</li>
-              <li>Contribute to automated image builds and deployment workflows using Terraform, Packer, GitHub Actions and PowerShell to improve consistency and reduce manual effort.</li>
-              <li>Help define multi-region cloud desktop architecture, and develop and validate disaster-recovery procedures to strengthen service resilience.</li>
-              <li>Support platform modernization and cloud desktop migrations, evaluating technical requirements, operational tradeoffs and user experience.</li>
-              <li>Deliver identity, security and cost-management improvements across enterprise virtual endpoint environments.</li>
-              <li>Lead hands-on technical recovery during major service incidents, coordinating troubleshooting, service validation and follow-up improvements.</li>
-              <li>Translate platform, utilization and cost data into technical recommendations that support leadership decisions.</li>
+              <li>Engineer and support desktop and published-app platforms on Azure Virtual Desktop, Windows 365 and Omnissa Horizon.</li>
+              <li>Lead hands-on recovery during major incidents, from troubleshooting through service validation and follow-up fixes.</li>
+              <li>Troubleshoot Horizon and App Volumes across brokers, images, vSphere and network layers, escalating to the vendor when needed.</li>
+              <li>Build image and deployment automation with Terraform, Packer, GitHub Actions and PowerShell.</li>
+              <li>Shape multi-region cloud desktop architecture, and develop and validate disaster-recovery procedures.</li>
+              <li>Turn platform, utilization and cost data into recommendations for leadership.</li>
             </ul>
           </div>
         </article>
@@ -376,8 +373,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
             <p class="org">Waystar (the combination of Navicure and ZirMed)</p>
             <ul>
               <li>Managed VMware Horizon View 6, including UEM, App Volumes, Instant Clones and image management.</li>
-              <li>Built and maintained golden images for Instant Clone desktop pools, and delivered applications to them with App Volumes.</li>
-              <li>Managed user environment settings with UEM and administered the vSphere infrastructure behind the desktops through vCenter 6.</li>
+              <li>Managed vCenter 6.</li>
             </ul>
           </div>
         </article>
@@ -387,9 +383,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
             <h3>Desktop Administrator</h3>
             <p class="org">Navicure</p>
             <ul>
-              <li>Fixed laptops, desktops and printers, and imaged machines.</li>
-              <li>Created Active Directory user accounts and configured user applications for new and existing employees.</li>
-              <li>Supported end users on desktop, laptop and printer issues through to resolution.</li>
+              <li>Fixed and imaged laptops and desktops, repaired printers, and set up Active Directory accounts and user applications.</li>
             </ul>
           </div>
         </article>
@@ -400,7 +394,6 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
             <p class="org">Forsyth County Schools, Forsyth, GA</p>
             <ul>
               <li>Provided break/fix support for HP laptops and desktops, projectors and smart boards.</li>
-              <li>Kept classroom and office technology running for staff and students across the district.</li>
             </ul>
           </div>
         </article>
@@ -411,7 +404,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     <div class="wrap">
       <div class="head">
         <h2>Credentials</h2>
-        <p>Certifications, newest first. Education: Computer Science and Information Technology, Gainesville State College, 2003 – 2009.</p>
+        <p>Certifications, newest first. Education: Computer Science, Gainesville State College.</p>
       </div>
       <ul class="certs">
         <li><b>Azure Fundamentals (AZ-900)</b><small>Microsoft · Aug 2024</small></li>
@@ -433,7 +426,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         </div>
         <div class="contact-actions">
           <a class="btn primary" href="https://linkedin.com/in/oscarfsaenz" target="_blank" rel="noopener">Message on LinkedIn</a>
-          <a class="btn ghost" href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">Download resume (PDF)</a>
+          <a class="btn ghost" hidden href="Oscar-Saenz-Resume.pdf" download="Oscar-Saenz-Resume.pdf">Download resume (PDF)</a>
           <button class="btn ghost" id="mailBtn" type="button">Send an email</button>
           <button class="btn ghost" id="copyBtn" type="button">Copy email address</button>
           <div class="addr" id="addr" aria-live="polite"></div>
